@@ -1,13 +1,13 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import LoadingSpinner from './components/LoadingSpinner'
-import ChatHeader from './components/ChatHeader'
-import ChatMessage from './components/ChatMessage'
-import ChatInput from './components/ChatInput'
-import TypingIndicator from './components/TypingIndicator'
-import WelcomeMessage from './components/WelcomeMessage'
-import { Message } from './types/chat'
+import LoadingSpinner from '@/components/LoadingSpinner'
+import ChatHeader from '@/components/ChatHeader'
+import ChatMessage from '@/components/ChatMessage'
+import ChatInput from '@/components/ChatInput'
+import TypingIndicator from '@/components/TypingIndicator'
+import WelcomeMessage from '@/components/WelcomeMessage'
+import { Message } from '@/types/chat'
 
 export default function ChatPage() {
 	const [messages, setMessages] = useState<Message[]>([])
