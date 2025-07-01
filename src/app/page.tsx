@@ -2,12 +2,12 @@
 
 import { useState, useEffect, useRef } from 'react'
 import LoadingSpinner from './components/LoadingSpinner'
-
-type Message = {
-	id: number
-	text: string
-	sender: 'user' | 'ai'
-}
+import ChatHeader from './components/ChatHeader'
+import ChatMessage from './components/ChatMessage'
+import ChatInput from './components/ChatInput'
+import TypingIndicator from './components/TypingIndicator'
+import WelcomeMessage from './components/WelcomeMessage'
+import { Message } from './types/chat'
 
 export default function ChatPage() {
 	const [messages, setMessages] = useState<Message[]>([])
@@ -32,6 +32,10 @@ export default function ChatPage() {
 		return () => clearTimeout(timer)
 	}, [])
 
+	const handleQuickSuggestion = (suggestion: string) => {
+		setInput(suggestion)
+	}
+
 	const handleSendMessage = async (e: React.FormEvent) => {
 		e.preventDefault()
 		if (input.trim() === '' || isLoading) return
@@ -40,6 +44,7 @@ export default function ChatPage() {
 			id: Date.now(),
 			text: input,
 			sender: 'user',
+			timestamp: new Date(),
 		}
 
 		setMessages(prevMessages => [...prevMessages, userMessage])
@@ -65,14 +70,16 @@ export default function ChatPage() {
 				id: Date.now() + 1,
 				text: data.response,
 				sender: 'ai',
+				timestamp: new Date(),
 			}
 			setMessages(prevMessages => [...prevMessages, aiMessage])
 		} catch (error) {
 			console.error('Error sending message:', error)
 			const errorMessage: Message = {
 				id: Date.now() + 1,
-				text: 'Sorry, there was an error processing your message.',
+				text: '🔄 Sorry, there was an error processing your message. Please try again.',
 				sender: 'ai',
+				timestamp: new Date(),
 			}
 			setMessages(prevMessages => [...prevMessages, errorMessage])
 		} finally {
@@ -85,49 +92,29 @@ export default function ChatPage() {
 	}
 
 	return (
-		<div className='flex flex-col h-screen bg-gray-100 dark:bg-gray-900'>
-			<div className='flex-1 p-4 overflow-y-auto'>
+		<div className='flex flex-col h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800'>
+			<ChatHeader />
+
+			{/* Messages */}
+			<div className='flex-1 p-4 overflow-y-auto messages-container'>
 				<div className='flex flex-col gap-4'>
+					{messages.length === 0 && (
+						<WelcomeMessage onQuickSuggestion={handleQuickSuggestion} />
+					)}
 					{messages.map(message => (
-						<div
-							key={message.id}
-							className={`flex ${
-								message.sender === 'user' ? 'justify-end' : 'justify-start'
-							}`}
-						>
-							<div
-								className={`max-w-xs md:max-w-md lg:max-w-lg px-4 py-2 rounded-2xl ${
-									message.sender === 'user'
-										? 'bg-blue-500 text-white'
-										: 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white'
-								}`}
-							>
-								{message.text}
-							</div>
-						</div>
+						<ChatMessage key={message.id} message={message} />
 					))}
+					{isLoading && <TypingIndicator />}
 					<div ref={messagesEndRef} />
 				</div>
 			</div>
 
-			<div className='p-4 pb-6 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700'>
-				<form onSubmit={handleSendMessage} className='flex items-center gap-4'>
-					<input
-						type='text'
-						value={input}
-						onChange={e => setInput(e.target.value)}
-						placeholder='Type your message...'
-						className='flex-1 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white'
-					/>
-					<button
-						type='submit'
-						disabled={isLoading}
-						className='px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed'
-					>
-						{isLoading ? 'Sending...' : 'Send'}
-					</button>
-				</form>
-			</div>
+			<ChatInput
+				input={input}
+				setInput={setInput}
+				onSendMessage={handleSendMessage}
+				isLoading={isLoading}
+			/>
 		</div>
 	)
 }
