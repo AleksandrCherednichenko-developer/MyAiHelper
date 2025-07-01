@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import Groq from 'groq-sdk'
 
 const groq = new Groq({
-	apiKey: process.env.groq_api_key,
+	apiKey: process.env.groq - api - key,
 })
 
 export async function POST(request: NextRequest) {
@@ -19,20 +19,20 @@ export async function POST(request: NextRequest) {
 		// Check if Groq API key is configured
 		console.log(
 			'API Key check:',
-			process.env.groq_api_key ? 'API key is set' : 'API key is missing'
+			process.env.groq - api - key ? 'API key is set' : 'API key is missing'
 		)
 
 		if (
-			!process.env.groq_api_key ||
-			process.env.groq_api_key === 'your_groq_api_key_here'
+			!process.env.groq - api - key ||
+			process.env.groq - api - key === 'your_groq-api-key_here'
 		) {
 			// Fallback to mock responses if API key is not configured
 			const mockResponses = [
-				'Это интересный вопрос! Расскажите больше. (Моковый ответ - настройте GROQ_API_KEY)',
+				'Это интересный вопрос! Расскажите больше. (Моковый ответ - настройте groq-api-key)',
 				'Я понимаю вашу точку зрения. Что вы думаете об этом? (Моковый ответ)',
 				'Хороший вопрос! Давайте разберем это подробнее. (Моковый ответ)',
 				'Интересно! А как вы к этому пришли? (Моковый ответ)',
-				'Спасибо за вопрос. Настройте GROQ_API_KEY для реальных ответов AI.',
+				'Спасибо за вопрос. Настройте groq-api-key для реальных ответов AI.',
 			]
 
 			const randomResponse =
