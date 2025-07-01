@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import LoadingSpinner from './components/LoadingSpinner'
 
 type Message = {
 	id: number
@@ -12,6 +13,7 @@ export default function ChatPage() {
 	const [messages, setMessages] = useState<Message[]>([])
 	const [input, setInput] = useState('')
 	const [isLoading, setIsLoading] = useState(false)
+	const [isAppReady, setIsAppReady] = useState(false)
 	const messagesEndRef = useRef<HTMLDivElement>(null)
 
 	const scrollToBottom = () => {
@@ -21,6 +23,14 @@ export default function ChatPage() {
 	useEffect(() => {
 		scrollToBottom()
 	}, [messages])
+
+	useEffect(() => {
+		// Simulate app initialization
+		const timer = setTimeout(() => {
+			setIsAppReady(true)
+		}, 1000)
+		return () => clearTimeout(timer)
+	}, [])
 
 	const handleSendMessage = async (e: React.FormEvent) => {
 		e.preventDefault()
@@ -68,6 +78,10 @@ export default function ChatPage() {
 		} finally {
 			setIsLoading(false)
 		}
+	}
+
+	if (!isAppReady) {
+		return <LoadingSpinner />
 	}
 
 	return (
