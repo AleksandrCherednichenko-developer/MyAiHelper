@@ -92,7 +92,7 @@ export default function ChatPage() {
 				</div>
 			</div>
 
-			<div className='p-4 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700'>
+			<div className='p-4 pb-6 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700'>
 				<form onSubmit={handleSendMessage} className='flex items-center gap-4'>
 					<input
 						type='text'
