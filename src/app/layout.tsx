@@ -15,6 +15,7 @@ export default function RootLayout({
 	return (
 		<html lang='en'>
 			<head>
+				<link rel='preconnect' href='https://api.groq.com' />
 				<Script
 					src='https://telegram.org/js/telegram-web-app.js'
 					strategy='beforeInteractive'

@@ -11,6 +11,7 @@ type Message = {
 export default function ChatPage() {
 	const [messages, setMessages] = useState<Message[]>([])
 	const [input, setInput] = useState('')
+	const [isLoading, setIsLoading] = useState(false)
 	const messagesEndRef = useRef<HTMLDivElement>(null)
 
 	const scrollToBottom = () => {
@@ -23,7 +24,7 @@ export default function ChatPage() {
 
 	const handleSendMessage = async (e: React.FormEvent) => {
 		e.preventDefault()
-		if (input.trim() === '') return
+		if (input.trim() === '' || isLoading) return
 
 		const userMessage: Message = {
 			id: Date.now(),
@@ -34,6 +35,7 @@ export default function ChatPage() {
 		setMessages(prevMessages => [...prevMessages, userMessage])
 		const currentInput = input
 		setInput('')
+		setIsLoading(true)
 
 		try {
 			const response = await fetch('/api/chat', {
@@ -63,6 +65,8 @@ export default function ChatPage() {
 				sender: 'ai',
 			}
 			setMessages(prevMessages => [...prevMessages, errorMessage])
+		} finally {
+			setIsLoading(false)
 		}
 	}
 
@@ -103,9 +107,10 @@ export default function ChatPage() {
 					/>
 					<button
 						type='submit'
-						className='px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500'
+						disabled={isLoading}
+						className='px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed'
 					>
-						Send
+						{isLoading ? 'Sending...' : 'Send'}
 					</button>
 				</form>
 			</div>

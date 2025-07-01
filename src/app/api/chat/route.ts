@@ -1,9 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server'
-import Groq from 'groq-sdk'
 
-const groq = new Groq({
-	apiKey: process.env.GROQ_API_KEY || process.env['groq-api-key'],
-})
+// Lazy load Groq SDK to improve cold start performance
+let groq: any = null
+
+const getGroqClient = async () => {
+	if (!groq) {
+		const Groq = (await import('groq-sdk')).default
+		groq = new Groq({
+			apiKey: process.env.GROQ_API_KEY || process.env['groq-api-key'],
+		})
+	}
+	return groq
+}
 
 export async function POST(request: NextRequest) {
 	try {
@@ -47,7 +55,8 @@ export async function POST(request: NextRequest) {
 		// Use Groq AI for real responses
 		console.log('Attempting to call Groq API with message:', message)
 
-		const chatCompletion = await groq.chat.completions.create({
+		const groqClient = await getGroqClient()
+		const chatCompletion = await groqClient.chat.completions.create({
 			messages: [
 				{
 					role: 'system',
