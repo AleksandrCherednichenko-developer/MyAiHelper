@@ -21,7 +21,7 @@ export default function ChatInput({
 						onChange={e => setInput(e.target.value)}
 						placeholder='Type your message...'
 						disabled={isLoading}
-						className='w-full p-3 pr-12 border border-gray-300 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:text-white placeholder-gray-500 dark:placeholder-gray-400 disabled:opacity-50 transition-all duration-200'
+						className='w-full pl-3 py-2 pr-12 border border-gray-300 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:text-white placeholder-gray-500 dark:placeholder-gray-400 disabled:opacity-50 transition-all duration-200'
 					/>
 					{input && (
 						<button
@@ -36,12 +36,12 @@ export default function ChatInput({
 				<button
 					type='submit'
 					disabled={isLoading || !input.trim()}
-					className='size-10 p-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl hover:from-blue-600 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-md hover:shadow-lg'
+					className='flex items-center justify-center size-10 p-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl hover:from-blue-600 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-md hover:shadow-lg'
 				>
 					{isLoading ? (
 						<div className='w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin'></div>
 					) : (
-						<span className='text-lg'>➤</span>
+						<span className='text-2xl'>➤</span>
 					)}
 				</button>
 			</form>
