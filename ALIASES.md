@@ -22,6 +22,7 @@ import ChatInput from '@/components/ChatInput'
 
 ```typescript
 import { Message } from '@/types/chat'
+import { ChatRequest, ChatResponse } from '@/types/api'
 ```
 
 ### `@/api/*` - API routes
@@ -52,28 +53,25 @@ import { formatDate } from '@/utils/date'
 import { validateInput } from '@/utils/validation'
 ```
 
+### `@/hooks/*` - Кастомные React хуки
+
+```typescript
+import { useChat } from '@/hooks/use-chat'
+```
+
+### `@/services/*` - API сервисы
+
+```typescript
+import { ChatService } from '@/services/chat-service'
+import { UserService } from '@/services/user-service'
+```
+
 ## Преимущества использования алиасов
 
 1. **Короткие импорты** - не нужно писать длинные относительные пути
 2. **Легкость рефакторинга** - при перемещении файлов импорты не ломаются
 3. **Читаемость кода** - сразу понятно, откуда импортируется модуль
 4. **Автодополнение** - IDE лучше понимает структуру проекта
-
-## Примеры использования
-
-### До (относительные импорты)
-
-```typescript
-import ChatMessage from '../../../components/ChatMessage'
-import { Message } from '../../types/chat'
-```
-
-### После (алиасы)
-
-```typescript
-import ChatMessage from '@/components/ChatMessage'
-import { Message } from '@/types/chat'
-```
 
 ## Структура папок
 
@@ -84,6 +82,12 @@ src/
 │   ├── types/         # @/types/*
 │   ├── api/           # @/api/*
 │   └── styles/        # @/styles/*
-├── lib/               # @/lib/*
+├── lib/
+│   ├── api/           # API архитектура
+│   │   ├── base-client.ts
+│   │   ├── services/  # @/services/*
+│   │   └── index.ts
+│   ├── hooks/         # @/hooks/*
+│   └── examples.ts
 └── utils/             # @/utils/*
 ```
