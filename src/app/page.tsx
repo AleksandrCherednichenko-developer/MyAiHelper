@@ -7,14 +7,14 @@ import ChatMessage from '@/components/ChatMessage'
 import ChatInput from '@/components/ChatInput'
 import TypingIndicator from '@/components/TypingIndicator'
 import WelcomeMessage from '@/components/WelcomeMessage'
-import { Message } from '@/types/chat'
+import { useChat } from '@/hooks/use-chat'
 
 export default function ChatPage() {
-	const [messages, setMessages] = useState<Message[]>([])
 	const [input, setInput] = useState('')
-	const [isLoading, setIsLoading] = useState(false)
 	const [isAppReady, setIsAppReady] = useState(false)
 	const messagesEndRef = useRef<HTMLDivElement>(null)
+
+	const { messages, isLoading, sendMessage } = useChat()
 
 	const scrollToBottom = () => {
 		messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -40,51 +40,9 @@ export default function ChatPage() {
 		e.preventDefault()
 		if (input.trim() === '' || isLoading) return
 
-		const userMessage: Message = {
-			id: Date.now(),
-			text: input,
-			sender: 'user',
-			timestamp: new Date(),
-		}
-
-		setMessages(prevMessages => [...prevMessages, userMessage])
 		const currentInput = input
 		setInput('')
-		setIsLoading(true)
-
-		try {
-			const response = await fetch('/api/chat', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({ message: currentInput }),
-			})
-
-			if (!response.ok) {
-				throw new Error('Failed to get AI response')
-			}
-
-			const data = await response.json()
-			const aiMessage: Message = {
-				id: Date.now() + 1,
-				text: data.response,
-				sender: 'ai',
-				timestamp: new Date(),
-			}
-			setMessages(prevMessages => [...prevMessages, aiMessage])
-		} catch (error) {
-			console.error('Error sending message:', error)
-			const errorMessage: Message = {
-				id: Date.now() + 1,
-				text: '🔄 Sorry, there was an error processing your message. Please try again.',
-				sender: 'ai',
-				timestamp: new Date(),
-			}
-			setMessages(prevMessages => [...prevMessages, errorMessage])
-		} finally {
-			setIsLoading(false)
-		}
+		await sendMessage(currentInput)
 	}
 
 	if (!isAppReady) {
