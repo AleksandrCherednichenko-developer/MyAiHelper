@@ -28,7 +28,9 @@ export default function ChatMessage({ message }: ChatMessageProps) {
 							: 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-600'
 					}`}
 				>
-					<p className='leading-relaxed break-words'>{message.text}</p>
+					<p className='leading-relaxed break-words whitespace-pre-wrap'>
+						{message.text}
+					</p>
 				</div>
 				{message.timestamp && (
 					<div
