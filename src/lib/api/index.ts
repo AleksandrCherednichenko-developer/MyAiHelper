@@ -11,8 +11,5 @@ export class ApiClient {
 // Экспортируем экземпляр клиента
 export const apiClient = new ApiClient()
 
-// Экспортируем класс для тестирования
-export { ApiClient }
-
 // Экспортируем сервисы для прямого использования
 export { ChatService } from './services'
